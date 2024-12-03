@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Cuenta del usuario</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/css/login.css" type="text/css"/>
+    </head>
+
+    <body>
+        <header class="header">
+            <h1 id="title">Bienvenido</h1>
+            <h3 id="title2" th:text="${session.sessionUsuario.nombre}"></h3>
+            <button id="goIndex" onclick="location.href='/'">Volver al inicio</button>
+        </header><br><br>
+        <input type="hidden" name="id" th:value="${session.sessionUsuario.id}" />
+
+        <div id="datosUser">
+            <div class="enlaces">
+                <button id="edit"><a th:href="@{/usuario/editar-perfil(id=__${session.sessionUsuario.id}__)}"
+                    class="btn btn-primary btn xl rounded-pill mt-5">Editar Perfil</a>
+                </button>
+            </div>
+            <div class="enlaces" th:if="${session.sessionUsuario.libro != null}">
+                <button id="edit">
+                    <a th:href="@{/devolver-libro(id=__${session.sessionUsuario.id}__)}" class="btn btn-primary btn xl rounded-pill mt-5">Devolver libro</a>
+                </button>
+            </div>
+            <h5 sec:authorize="hasRole('ROLE_ADMIN')">ADMIN</h5>
+            <h5 th:if="${session.sessionUsuario != null}" th:text="${libroPrestado}"> </h5>
+        </div>
+        <br><br>
+
+        <section class="content" sec:authorize="hasRole('ROLE_ADMIN')">
+            <table class="form-control" name="usuarios">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Fecha de creacion</th>
+                    <th>fecha de baja</th>
+                    <th>Correo electronico</th>
+                    <th>Libro prestado</th>
+                </tr>
+                <tr th:each="usuario : ${usuarios}">
+                    <td th:text="${usuario.nombre}"></td>
+                    <td th:text="${usuario.alta}"></td>
+                    <td th:text="${usuario.baja}"></td>
+                    <td th:text="${usuario.email}"></td>
+                    <td th:if="${usuario.libro != null}"th:text="${usuario.libro.titulo}"></td>
+
+                </tr>
+            </table>
+        </section>
+        
+        
+
+        <!--<div class="container">
+            <a th:href="@{/usuario/editar-perfil(id=__${session.sessionUsuario.id}__)}"
+               class="btn btn-primary btn xl rounded-pill mt-5">Edita tu perfil</a><br><br>
+            <button id="goIndex" onclick="location.href = '/'">Volver al inicio</button><br><br>
+            <a th:href="@{/devolver-libro(id=__${session.sessionUsuario.id}__)}"
+               th:if="${session.sessionUsuario.libro != null}" class="btn btn-primary btn xl rounded-pill mt-5">Devolver
+                libro</a>
+
+            <img class="img-fluid rounderd-circle" th:src="${'/foto/usuario/' + session.sessionUsuario.id}" alt="userimg">
+            <video th:src="${'/foto/usuario/' + session.sessionUsuario.id}" ></video>
+        </div>-->
+        <br><br>
+        <img id="fotousuario" th:if="${perfil.foto != null}" class="img-fluid rounderd-circle" th:src="${'/foto/usuario/' + perfil.id}" alt="userimg">
+
+
+    </body>
+
+</html>
+<!--th:if="${session.sessionUsuario.foto != null}"-->
+<!-- th:if="${session.sessionUsuario.libro != null}" -->
